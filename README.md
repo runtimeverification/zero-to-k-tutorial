@@ -1,7 +1,7 @@
 Understanding K Framework Exercises
 ===================================
 
-Prepared for: HelloDecentralization 2021
+Prepared for: [HelloDecentralization 2021](https://hellodecentralization.com/)
 
 Setup
 -----

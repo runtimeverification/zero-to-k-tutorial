@@ -36,7 +36,11 @@ module SUBST
 
     configuration
       <k> $PGM:Exp </k>
-      <mem> .Map </mem>
+      <mem> #token("a", "Id") |-> 15
+            #token("b", "Id") |-> 3
+            #token("c", "Id") |-> 2
+            #token("d", "Id") |-> 9
+      </mem>
 
     rule <k> IE:IExp => substI(IE, MEM) ... </k>
          <mem> MEM </mem>

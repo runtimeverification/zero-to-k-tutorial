@@ -2,6 +2,7 @@ Understanding K Framework Exercises
 ===================================
 
 Prepared for: [HelloDecentralization 2021](https://hellodecentralization.com/)
+Presentation: <presentation.pdf>
 
 Setup
 -----
@@ -45,3 +46,7 @@ Getting Started With Proofs
 ---------------------------
 
 In the directory [tests/control-flow](tests/control-flow), there are some specifications which can be proven against the final definition.
+You must first kompile with Haskell backend `kompile --backend haskell ...`.
+Then you can run proofs using `kprove tests/control-flow/*-spec.k`.
+Additionally you can step through the proofs in the debugger using `kprove --debugger tests/control-flow/*-spec.k`.
+To make pretty printing of definitions possible, run the command `alias konfig = config | kast --input kore --output pretty /dev/stdin` inside the repl.

@@ -1,4 +1,4 @@
-module ASSIGNMENT-SYNTAX
+module CONTROL-FLOW-SYNTAX
     imports INT-SYNTAX
     imports BOOL-SYNTAX
     imports ID
@@ -29,13 +29,17 @@ module ASSIGNMENT-SYNTAX
 
     syntax Stmt ::= Id "=" IExp ";"
                   | Stmt Stmt [left]
+                  | "{" Stmt "}"
+                  | "if" "(" BExp ")" Stmt "else" Stmt
+                  | "{" "}"
+                  | "while" "(" BExp ")" Stmt
 endmodule
 
-module ASSIGNMENT
+module CONTROL-FLOW
     imports INT
     imports BOOL
     imports MAP
-    imports ASSIGNMENT-SYNTAX
+    imports CONTROL-FLOW-SYNTAX
 
     configuration
       <k> $PGM:Stmt </k>
@@ -79,4 +83,17 @@ module ASSIGNMENT
 
     rule <k> ID = IE ; => . ... </k>
          <mem> MEM => MEM [ ID <- substI(IE, MEM) ] </mem>
+
+    rule <k> { S } => S ... </k>
+
+    rule <k> if ( BE => substB(BE, SUBST) ) _ else _ ... </k>
+         <mem> SUBST </mem>
+      requires notBool isBool(BE)
+
+    rule <k> if (true)   THEN else _ELSE => THEN ... </k>
+    rule <k> if (false) _THEN else  ELSE => ELSE ... </k>
+
+    rule <k> { } => . ... </k>
+
+    rule <k> while ( BE ) BODY => if ( BE ) { BODY while ( BE ) BODY } else { } ... </k>
 endmodule

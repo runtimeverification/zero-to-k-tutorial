@@ -117,6 +117,9 @@ module PROCEDURES
          <stack> ListItem(state(CONT, MEM)) => .List ... </stack>
          <mem> _ => MEM </mem>
 
+    rule <k> return I:Int ; ~> . => I </k>
+         <stack> .List </stack>
+
     syntax KItem ::= #makeBindings(Ids, Ints)
                    | state(continuation: K, memory: Map)
  // ----------------------------------------------------

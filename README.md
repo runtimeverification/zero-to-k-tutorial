@@ -30,18 +30,31 @@ Now we must move to the *stateful* fragment of K, which requires adding a *confi
 We can hardcode some variable values in the configuration for now, to allow using them in programs.
 Examples in [tests/subst](tests/subst).
 
-### Exercise 4: Assignment Operator
+### Exercise 4.1: Assignment Operator
 
 Updating the entire definition each time to change variable values is impractical.
 Instead, we should provide a way for the user to update them instead.
 For this, we'll add *statements*, *statement sequencing*, and an *assignment operator*.
 Examples in [tests/assignment](tests/assignment).
 
+### Exercise 4.2: Assignment Operator
+
+Now re-do the assignment operator, but using `strict` instead of substitution for expression evaluation.
+
+### Exercise 4.3: Assignment Operator
+
+Now re-do the assignment operator, but using contextual functions instead of substitution for expression evaluation.
+
 ### Exercise 5: Control Flow
 
 We want to be able to have *branches* and *loops* in our programs, to do anything interesting.
 For that, we'll add an `if` statement, and a `while` loop.
 Examples in [tests/control-flow](tests/control-flow).
+
+### Exercise 6: Procedures
+
+We can add procedures to our language to be able to bundle up chunks of code and call them in other expressions.
+Examples in [tests/procedures](tests/procedures).
 
 Getting Started With Proofs
 ---------------------------

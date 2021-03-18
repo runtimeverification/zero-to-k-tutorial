@@ -7,31 +7,33 @@ module CONTROL-FLOW-SYNTAX
 
     syntax IExp ::= Id | Int
 
+    syntax KResult ::= Int | Bool
+
     syntax IExp ::= "(" IExp ")" [bracket]
-                  | IExp "+" IExp
-                  | IExp "-" IExp
-                  > IExp "*" IExp
-                  | IExp "/" IExp
-                  > IExp "^" IExp
+                  | IExp "+" IExp [strict]
+                  | IExp "-" IExp [strict]
+                  > IExp "*" IExp [strict]
+                  | IExp "/" IExp [strict]
+                  > IExp "^" IExp [strict]
 
     syntax BExp ::= Bool
 
     syntax BExp ::= "(" BExp ")" [bracket]
-                  | IExp "<=" IExp
-                  | IExp "<"  IExp
-                  | IExp ">=" IExp
-                  | IExp ">"  IExp
-                  | IExp "==" IExp
-                  | IExp "!=" IExp
+                  | IExp "<=" IExp [strict]
+                  | IExp "<"  IExp [strict]
+                  | IExp ">=" IExp [strict]
+                  | IExp ">"  IExp [strict]
+                  | IExp "==" IExp [strict]
+                  | IExp "!=" IExp [strict]
 
-    syntax BExp ::= BExp "&&" BExp
-                  | BExp "||" BExp
+    syntax BExp ::= BExp "&&" BExp [strict]
+                  | BExp "||" BExp [strict]
 
-    syntax Stmt ::= Id "=" IExp ";"
+    syntax Stmt ::= Id "=" IExp ";" [strict(2)]
                   | Stmt Stmt [left]
                   | "{" Stmt "}"
                   | "{"      "}"
-                  | "if" "(" BExp ")" Stmt "else" Stmt
+                  | "if" "(" BExp ")" Stmt "else" Stmt [strict(1)]
                   | "while" "(" BExp ")" Stmt
 endmodule
 
@@ -45,51 +47,34 @@ module CONTROL-FLOW
       <k> $PGM:Stmt </k>
       <mem> .Map </mem>
 
-    rule <k> IE:IExp => substI(IE, MEM) ... </k>
-         <mem> MEM </mem>
-      requires notBool isInt(IE)
-
-    rule <k> BE:BExp => substB(BE, MEM) ... </k>
-         <mem> MEM </mem>
-      requires notBool isBool(BE)
-
-    syntax Int ::= substI ( IExp , Map ) [function]
  // -----------------------------------------------
-    rule substI(I1 + I2, SUBST) => substI(I1, SUBST) +Int substI(I2, SUBST)
-    rule substI(I1 - I2, SUBST) => substI(I1, SUBST) -Int substI(I2, SUBST)
-    rule substI(I1 * I2, SUBST) => substI(I1, SUBST) *Int substI(I2, SUBST)
-    rule substI(I1 / I2, SUBST) => substI(I1, SUBST) /Int substI(I2, SUBST)
-    rule substI(I1 ^ I2, SUBST) => substI(I1, SUBST) ^Int substI(I2, SUBST)
+    rule <k> I1 + I2 => I1 +Int I2 ... </k>
+    rule <k> I1 - I2 => I1 -Int I2 ... </k>
+    rule <k> I1 * I2 => I1 *Int I2 ... </k>
+    rule <k> I1 / I2 => I1 /Int I2 ... </k>
+    rule <k> I1 ^ I2 => I1 ^Int I2 ... </k>
 
-    rule substI(I:Id,   SUBST) => {SUBST [ I ]}:>Int
-    rule substI(I:Int, _SUBST) => I
+    rule <k> I:Id => MEM[I] ... </k>
+         <mem> MEM </mem>
 
-    syntax Bool ::= substB ( BExp , Map ) [function]
  // ------------------------------------------------
-    rule substB(I1 <= I2, SUBST) => substI(I1, SUBST)  <=Int substI(I2, SUBST)
-    rule substB(I1  < I2, SUBST) => substI(I1, SUBST)   <Int substI(I2, SUBST)
-    rule substB(I1 >= I2, SUBST) => substI(I1, SUBST)  >=Int substI(I2, SUBST)
-    rule substB(I1  > I2, SUBST) => substI(I1, SUBST)   >Int substI(I2, SUBST)
-    rule substB(I1 == I2, SUBST) => substI(I1, SUBST)  ==Int substI(I2, SUBST)
-    rule substB(I1 != I2, SUBST) => substI(I1, SUBST) =/=Int substI(I2, SUBST)
+    rule <k> I1 <= I2 => I1  <=Int I2 ... </k>
+    rule <k> I1  < I2 => I1   <Int I2 ... </k>
+    rule <k> I1 >= I2 => I1  >=Int I2 ... </k>
+    rule <k> I1  > I2 => I1   >Int I2 ... </k>
+    rule <k> I1 == I2 => I1  ==Int I2 ... </k>
+    rule <k> I1 != I2 => I1 =/=Int I2 ... </k>
 
-    rule substB(B1 && B2, SUBST) => substB(B1, SUBST) andBool substB(B2, SUBST)
-    rule substB(B1 || B2, SUBST) => substB(B1, SUBST)  orBool substB(B2, SUBST)
-
-    rule substB(true , _SUBST) => true
-    rule substB(false, _SUBST) => false
+    rule <k> B1 && B2 => B1 andBool B2 ... </k>
+    rule <k> B1 || B2 => B1  orBool B2 ... </k>
 
     rule <k> S1:Stmt S2:Stmt => S1 ~> S2 ... </k>
 
-    rule <k> ID = IE ; => . ... </k>
-         <mem> MEM => MEM [ ID <- substI(IE, MEM) ] </mem>
+    rule <k> ID = I:Int ; => . ... </k>
+         <mem> MEM => MEM [ ID <- I ] </mem>
 
     rule <k> { S } => S ... </k>
     rule <k> {   } => . ... </k>
-
-    rule <k> if ( BE => substB(BE, SUBST) ) _ else _ ... </k>
-         <mem> SUBST </mem>
-      requires notBool isBool(BE)
 
     rule <k> if (true)   THEN else _ELSE => THEN ... </k>
     rule <k> if (false) _THEN else  ELSE => ELSE ... </k>

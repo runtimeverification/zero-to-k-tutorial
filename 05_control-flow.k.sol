@@ -30,8 +30,8 @@ module CONTROL-FLOW-SYNTAX
     syntax Stmt ::= Id "=" IExp ";"
                   | Stmt Stmt [left]
                   | "{" Stmt "}"
+                  | "{"      "}"
                   | "if" "(" BExp ")" Stmt "else" Stmt
-                  | "{" "}"
                   | "while" "(" BExp ")" Stmt
 endmodule
 
@@ -85,6 +85,7 @@ module CONTROL-FLOW
          <mem> MEM => MEM [ ID <- substI(IE, MEM) ] </mem>
 
     rule <k> { S } => S ... </k>
+    rule <k> {   } => . ... </k>
 
     rule <k> if ( BE => substB(BE, SUBST) ) _ else _ ... </k>
          <mem> SUBST </mem>
@@ -92,8 +93,6 @@ module CONTROL-FLOW
 
     rule <k> if (true)   THEN else _ELSE => THEN ... </k>
     rule <k> if (false) _THEN else  ELSE => ELSE ... </k>
-
-    rule <k> { } => . ... </k>
 
     rule <k> while ( BE ) BODY => if ( BE ) { BODY while ( BE ) BODY } else { } ... </k>
 endmodule

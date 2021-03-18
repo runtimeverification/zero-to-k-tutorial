@@ -1,0 +1,10 @@
+def sum ( n ) {
+  s = 0 ;
+  while (0 < n) {
+    s = s + n ;
+    n = n - 1 ;
+  }
+  return s ;
+}
+
+return sum(10) ;

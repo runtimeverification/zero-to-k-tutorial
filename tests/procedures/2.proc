@@ -1,0 +1,13 @@
+def sumAux ( s , n ) {
+  if (0 < n) {
+    return sumAux(s + n, n - 1) ;
+  } else {
+    return s ;
+  }
+}
+
+def sum ( n ) {
+  return sumAux(0, n) ;
+}
+
+return sum(10) ;

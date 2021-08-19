@@ -16,8 +16,14 @@ module VERIFICATION
     imports SIMPLE-SPEC-SYNTAX
     imports CONTROL-FLOW
 
-    rule maxInt(X, Y) => Y requires         X <Int Y [simplification]
-    rule maxInt(X, Y) => X requires notBool X <Int Y [simplification]
+    // Leave these lemmas out to turn the third claim into an exercise;
+    // Make a note that lemmas are missing and that they go here. Exercise is to
+    // figure out that `maxInt` is missing lemmas and implementing them correctly should
+    // be easy.
+    // An easier exercise could leave off only one of these lemmas.
+    
+    // rule maxInt(X, Y) => Y requires         X <Int Y [simplification]
+    // rule maxInt(X, Y) => X requires notBool X <Int Y [simplification]
 endmodule
 
 module SIMPLE-SPEC

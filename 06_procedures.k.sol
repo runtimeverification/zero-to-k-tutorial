@@ -63,6 +63,7 @@ module PROCEDURES
     imports INT
     imports BOOL
     imports MAP
+    imports LIST
     imports PROCEDURES-SYNTAX
 
     configuration

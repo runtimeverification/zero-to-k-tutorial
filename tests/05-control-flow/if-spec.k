@@ -1,29 +1,26 @@
-requires "../../control-flow.k"
+requires "../../05-control-flow/control-flow.k"
 requires "domains.md"
 
-module SIMPLE-SPEC-SYNTAX
+module IF-SPEC-SYNTAX
     imports CONTROL-FLOW-SYNTAX
 
     syntax Id ::= "$a" [token]
                 | "$b" [token]
                 | "$c" [token]
-                | "$x" [token]
-                | "$y" [token]
-                | "$z" [token]
 endmodule
 
 module VERIFICATION
-    imports SIMPLE-SPEC-SYNTAX
+    imports IF-SPEC-SYNTAX
     imports CONTROL-FLOW
 
     rule maxInt(X, Y) => Y requires         X <Int Y [simplification]
     rule maxInt(X, Y) => X requires notBool X <Int Y [simplification]
+
+    rule { MAP [ K <- V' ] #Equals MAP [ K <- V ] } => { V' #Equals V } [simplification, anywhere]
 endmodule
 
-module SIMPLE-SPEC
+module IF-SPEC
     imports VERIFICATION
-
-    claim <k> 3 + 4 => 7 ... </k>
 
     claim <k> if ( 3 < 4 ) {
                 $c = 1 ;
@@ -31,7 +28,7 @@ module SIMPLE-SPEC
                 $c = 2 ;
               }
            => . ... </k>
-          <mem> MEM => MEM [ $c <- 1 ] </mem>
+          <store> STORE => STORE [ $c <- 1 ] </store>
 
     claim <k> $a = A:Int ; $b = B:Int ;
               if (A < B) {
@@ -40,9 +37,9 @@ module SIMPLE-SPEC
                 $c = A ;
               }
            => . ... </k>
-          <mem> MEM => MEM [ $a <- A ] [ $b <- B ] [ $c <- ?C:Int ] </mem>
-      requires A <=Int ?C
-       andBool B <=Int ?C
+          <store> STORE => STORE [ $a <- A ] [ $b <- B ] [ $c <- ?C:Int ] </store>
+      ensures A <=Int ?C
+      andBool B <=Int ?C
 
     claim <k> $a = A:Int ; $b = B:Int ;
               if (A < B) {
@@ -51,6 +48,6 @@ module SIMPLE-SPEC
                 $c = A ;
               }
            => . ... </k>
-          <mem> MEM => MEM [ $a <- A ] [ $b <- B ] [ $c <- maxInt(A, B) ] </mem>
+          <store> STORE => STORE [ $a <- A ] [ $b <- B ] [ $c <- maxInt(A, B) ] </store>
 
 endmodule

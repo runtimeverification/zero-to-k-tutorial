@@ -1,4 +1,4 @@
-requires "../../procedures.k"
+requires "../../06-procedures/procedures.k"
 requires "domains.md"
 
 module SUM-SPEC-SYNTAX
@@ -8,9 +8,9 @@ module SUM-SPEC-SYNTAX
 endmodule
 
 module VERIFICATION
+    imports K-EQUAL
     imports SUM-SPEC-SYNTAX
     imports PROCEDURES
-    // imports MAP-SYMBOLIC
 
     rule ((K |->  V) _M) [ K' ] => V         requires K  ==K K' [simplification]
     rule ((K |-> _V)  M) [ K' ] => M [ K' ]  requires K =/=K K' [simplification]
@@ -27,9 +27,9 @@ module SUM-SPEC
                 NID = NID - 1 ;
               }
            => . ... </k>
-          <mem> SID |-> (S:Int => S +Int ((N +Int 1) *Int N /Int 2))
+          <store> SID |-> (S:Int => S +Int ((N +Int 1) *Int N /Int 2))
                 NID |-> (N:Int => 0)
-          </mem>
+          </store>
       requires N >=Int 0
        andBool S >=Int 0
 
@@ -45,7 +45,7 @@ module SUM-SPEC
            => return (N +Int 1) *Int N /Int 2 ;
           </k>
           <funcs> .Map => ?_ </funcs>
-          <mem> .Map => ?_ </mem>
+          <store> .Map => ?_ </store>
           <stack> .List </stack>
       requires N >=Int 0
 

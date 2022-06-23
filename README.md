@@ -1,18 +1,15 @@
-Understanding K Framework Exercises
-===================================
+# Understanding K Framework Exercises
 
 Prepared for: [HelloDecentralization 2021](https://hellodecentralization.com/)
 
 Presentation: [Presentation](presentation.pdf)
 
-Setup
------
+## Setup
 
 -   Install the K Framework: <https://github.com/kframework/k/releases>
 -   K Framework documentation: <https://kframework.org>
 
-Building a Language
--------------------
+## Building a Language
 
 ### Exercise 1: Calculator
 
@@ -56,11 +53,30 @@ Examples in [tests/control-flow](tests/control-flow).
 We can add procedures to our language to be able to bundle up chunks of code and call them in other expressions.
 Examples in [tests/procedures](tests/procedures).
 
-Getting Started With Proofs
----------------------------
+## Compiling the exercises and running the tests
 
-In the directory [tests/control-flow](tests/control-flow), there are some specifications which can be proven against the final definition.
-You must first kompile with Haskell backend `kompile --backend haskell ...`.
-Then you can run proofs using `kprove tests/control-flow/*-spec.k`.
-Additionally you can step through the proofs in the debugger using `kprove --debugger tests/control-flow/*-spec.k`.
-To make pretty printing of definitions possible, run the command `alias konfig = config | kast --input kore --output pretty /dev/stdin` inside the repl.
+From the root folder, you can compile a given exercise by executing:
+
+```make [exercise-folder]/[exercise-file].kompile``` 
+
+and then run the tests by executing:
+
+```make tests/[exercise-folder]/[test-file].krun```.
+
+For example, the first exercise can be compiled with 
+
+```
+make 01-calc/calc.k.kompile
+```
+
+and the first associated test can be run with 
+
+```
+make tests/01-calc/1.calc.krun
+```
+
+## Getting Started With Proofs
+
+For the final two exercises, the example test folders ([tests/05-control-flow](tests/05-control-flow) and [tests/06-procedures](tests/06-procedures)) also include some specifications that can be proven against the final definition.
+The details of how to run these proofs can be found in the corresponding exercise files ([Exercise 5](05-control-flow/README.md) and [Exercise 6](06-procedures/README.md)).
+

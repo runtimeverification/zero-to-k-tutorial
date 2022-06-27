@@ -85,4 +85,42 @@ Follow the instructions from the top-level [`README`](../README.md) file to comp
 
 ## Proving program properties
 
-TODO
+For this exercise, we re-use the `while` loop from the [previous exercise](../05-control-flow/README.md), together with its specification, wrap it in a function, then call that function and reason about the obtained result. Using slightly different identifiers and symbolic variables, the specification of the `while` loop is as follows:
+
+```
+claim 
+   <k> 
+      while ( 0 < NID ) {
+         SID = SID + NID ;
+          NID = NID - 1 ;
+      }
+   => . ... </k>
+   <store> 
+      SID |-> (S:Int => S +Int ((N +Int 1) *Int N /Int 2))
+      NID |-> (N:Int => 0)
+   </store>
+requires N >=Int 0
+```
+
+and the main program, together with its specification, is as follows:
+
+```
+claim 
+   <k> 
+      def $sum($n, .Ids) {
+         $s = 0 ;
+         while (0 < $n) {
+            $s = $s + $n ;
+            $n = $n - 1 ;
+         }
+         return $s ;
+      }
+      $n := $sum(N:Int, .Ints) ;
+   => . ... </k>
+   <funcs> .Map => ?_ </funcs>
+   <store> $n |-> (_ => ((N +Int 1) *Int N /Int 2)) </store>
+   <stack> .List </stack>
+   requires N >=Int 0
+```
+
+The specification states that this program, which consists of declaring a function `$sum` and then calling it with a non-negative symbolic integer `N`, ends up storing the sum of first `N` integers in the variable `$n`.

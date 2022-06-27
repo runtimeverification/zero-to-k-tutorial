@@ -108,7 +108,7 @@ claim
    </k>
    <store> STORE => STORE [ $a <- A ] [ $b <- B ] [ $c <- ?C:Int ] </store>
    ensures A <=Int ?C andBool
-            B <=Int ?C
+           B <=Int ?C
 ```
 
 introduces two symbolic integers, `A` and `B`, and states that after the execution of the given program, the store will have been updated so that the value of `$a` equals `A`, the value of `$b` equals `B`, and the value of `$c` equals *some* symbolic integer `?C` such that `A <= C` and `B <= C`. More precisely, for symbolic variables, the notation `?` denotes *existential quantification*, whereas the absence of `?` (for example, the way `A` and `B` are introduced) denotes *universal quantification*. The `ensures` clause corresponds to a post-condition of sorts, stating conditions that must hold after the execution. The last claim states precisely what the value of `?C` is, replacing it with the function `maxInt(A, B)`, defined in the `VERIFICATION` module as the greater of the two parameters.
